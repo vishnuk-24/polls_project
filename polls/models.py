@@ -1,7 +1,11 @@
 """Polls model."""
 
+import datetime
+
 from django.db import models
-from core import BaseModel
+from django.utils import timezone
+
+from core.models import BaseModel
 
 
 class Question(BaseModel):
@@ -12,6 +16,9 @@ class Question(BaseModel):
 
     def __str__(self):
         return self.question_text
+
+    def was_published_recently(self):
+        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
 
 class Choice(BaseModel):
