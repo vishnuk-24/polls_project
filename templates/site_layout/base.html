@@ -1,0 +1,17 @@
+{% load static %}
+<html>
+<head>
+
+<title>{% block title %}{% endblock %}</title>
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+
+</head>
+
+<body>
+    <img src="{% static "images/admin.png" %}" alt="Logo" />
+    <p><a href="{% url 'polls:index' %}"> Main Page</a></p>
+{% block content %} {% endblock %}
+</body>
+
+</html>
