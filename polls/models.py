@@ -18,7 +18,8 @@ class Question(BaseModel):
         return self.question_text
 
     def was_published_recently(self):
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
 
 class Choice(BaseModel):
@@ -30,3 +31,20 @@ class Choice(BaseModel):
 
     def __str__(self):
         return self.choice_text
+
+
+class Reporter(BaseModel):
+    full_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.full_name
+
+
+class Article(BaseModel):
+    pub_date = models.DateField()
+    headline = models.CharField(max_length=200)
+    content = models.TextField()
+    reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.headline
