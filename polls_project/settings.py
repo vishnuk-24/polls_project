@@ -40,12 +40,13 @@ DJANGO_APPS = [
 ]
 
 THIRDPARTY_APPS = [
-
+    'rest_framework',
 ]
 
 PROJECT_APPS = [
     'core',
-    'polls'
+    'polls',
+    'pollsapi'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRDPARTY_APPS + PROJECT_APPS
