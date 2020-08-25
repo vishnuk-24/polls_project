@@ -41,6 +41,8 @@ DJANGO_APPS = [
 
 THIRDPARTY_APPS = [
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_swagger',
 ]
 
 PROJECT_APPS = [
@@ -115,6 +117,20 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Django Rest Framework authentication scheme
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

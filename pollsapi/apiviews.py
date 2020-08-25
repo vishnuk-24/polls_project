@@ -5,11 +5,38 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from django.contrib.auth import authenticate
+# from django.contrib.auth import authenticate, login
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 
 from .models import Poll, Choice, Vote
-from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer
+from .serializers import PollSerializer, ChoiceSerializer, VoteSerializer, UserSerializer
+
+
+class LoginView(APIView):
+    """APIView for authenticate users."""
+
+    permission_classes = ()
+
+    def post(self, request,):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            # login(request, user)
+            return Response({'token': user.auth_token.key})
+        else:
+            return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserCreate(generics.CreateAPIView):
+    """View for create User object."""
+
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = UserSerializer
 
 
 class PollList(generics.ListCreateAPIView):

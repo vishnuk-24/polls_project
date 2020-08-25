@@ -1,6 +1,9 @@
 """Pollsapi serializers."""
 
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+
+from django.contrib.auth.models import User
 
 from .models import Poll, Choice, Vote
 
@@ -12,6 +15,7 @@ class VoteSerializer(serializers.ModelSerializer):
         model = Vote
         fields = '__all__'
 
+
 class ChoiceSerializer(serializers.ModelSerializer):
     """Serializer for choice model instances"""
 
@@ -21,6 +25,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
         model = Choice
         fields = '__all__'
 
+
 class PollSerializer(serializers.ModelSerializer):
     """Serializer for Polls model instances."""
 
@@ -29,6 +34,28 @@ class PollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll
         fields = '__all__'
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """Serializer for User model."""
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        """create a user using only email and username fields."""
+        # overriden the ModelSerializer method’s create() to save the User instances.
+        user = User(
+            email=validated_data['email'],
+            username=validated_data['username']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        Token.objects.create(user=user)
+        return user
+
 
 """
 
